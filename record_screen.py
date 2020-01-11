@@ -2,6 +2,7 @@ import numpy as np
 from PIL import ImageGrab
 import cv2
 import time
+from key_strokes import PressKey, W, A, S, D
 
 def process_img(original_img):
     """
@@ -27,6 +28,7 @@ def main():
     while(True):
         # grab the image with PIL and convert to a numpy array
         area_box = [0, 40, 800, 640]
+        PressKey(W)
         img =  np.array(ImageGrab.grab(bbox=(area_box)))
         processed_img = process_img(img)
 
