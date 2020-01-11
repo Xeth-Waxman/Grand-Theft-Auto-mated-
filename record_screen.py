@@ -3,6 +3,19 @@ from PIL import ImageGrab
 import cv2
 import time
 from key_strokes import PressKey, ReleaseKey, W, A, S, D
+import pyautogui
+
+
+
+
+def draw_lines(img, lines):
+    try:
+        for line in lines:
+            coords = line[0]
+            cv2.line(img, (coords[0], coords[1]), (coords[2], coords[3]), [255, 255, 255], 3)
+    except:
+        pass
+
 
 def process_img(original_img):
     """
@@ -13,11 +26,21 @@ def process_img(original_img):
     processed_img = cv2.cvtColor(original_img, cv2.COLOR_BGR2RGB)
 
     #perform Canny edge detection
-    processed_img = cv2.Canny(processed_img, threshold1=300, threshold2=400)
+    processed_img = cv2.Canny(processed_img, threshold1=100, threshold2=400)
+
+    #blur lines to help with anti-aliasing
+    processed_img = cv2.GaussianBlur(processed_img, (5, 5), 0)
 
     #return the region of interest
     vertices = np.array([[0, 600], [0, 350], [300, 150],[500, 150], [800, 350], [800, 600]])
     processed_img = region_of_interest(processed_img, [vertices])
+
+    #hough our lines here
+    lines = cv2.HoughLines(processed_img, 1, np.pi/180, 180, 20, 15)
+
+    #draw the lines
+    draw_lines(processed_img, lines)
+
     return processed_img
 
 
