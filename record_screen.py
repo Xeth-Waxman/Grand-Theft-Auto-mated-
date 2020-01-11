@@ -1,6 +1,7 @@
 import numpy as np
 from PIL import ImageGrab
 import cv2
+import time
 
 def process_img(original_img):
     """
@@ -15,19 +16,26 @@ def process_img(original_img):
     return processed_img
 
 
-# def screen_record(area_box = [0, 40, 800, 540]):
-#     """
-#     Grabs an image area of the screen in a continuous loop
-#     """
-while(True):
-    # grab the image with PIL and convert to a numpy array
-    area_box = [0, 40, 800, 640]
-    img =  np.array(ImageGrab.grab(bbox=(area_box)))
-    processed_img = process_img(img)
+def main():
 
-    #show and refresh the captured image, converted in RGB,  until ctrl-c is pressed
-    # cv2.imshow('window',cv2.cvtColor(processed_img, cv2.COLOR_BGR2RGB))
-    cv2.imshow('Widow', processed_img)
-    if cv2.waitKey(25) & 0xFF == ord('q'):
-        cv2.destroyAllWindows()
-        break
+    #countdown from 10 to give time to get to the GTA window
+    for i in list(range(9))[::-1]:
+        print(i+1)
+        time.sleep(1)
+
+
+    while(True):
+        # grab the image with PIL and convert to a numpy array
+        area_box = [0, 40, 800, 640]
+        img =  np.array(ImageGrab.grab(bbox=(area_box)))
+        processed_img = process_img(img)
+
+        #show and refresh the captured image, converted in RGB,  until ctrl-c is pressed
+        # cv2.imshow('window',cv2.cvtColor(processed_img, cv2.COLOR_BGR2RGB))
+        cv2.imshow('Widow', processed_img)
+        if cv2.waitKey(25) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
+            break
+
+if __name__== "__main__":
+  main()
